@@ -1,0 +1,22 @@
+.maze {
+  display: inline-block;
+  border: 2px solid black;
+  padding: 5px;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+}
+
+.player {
+  width: 30px;
+  height: 30px;
+  background-color: #007bff; /* Blue color for the player */
+  border: 1px solid #ccc;
+}
