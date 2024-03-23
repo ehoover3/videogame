@@ -7,7 +7,7 @@ const MAZE_HEIGHT = 20;
 
 const Maze = () => {
   const [showStartScreen, setShowStartScreen] = useState(true);
-  const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
+  const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0, direction: "down" });
   const npcPosition = useMemo(() => ({ x: 5, y: 5 }), []);
   const [showDialogue, setShowDialogue] = useState(false);
 
@@ -16,12 +16,12 @@ const Maze = () => {
   };
 
   const movePlayer = useCallback(
-    (dx, dy) => {
+    (dx, dy, newDirection) => {
       const newX = playerPosition.x + dx;
       const newY = playerPosition.y + dy;
 
       if (newX >= 0 && newX < MAZE_WIDTH && newY >= 0 && newY < MAZE_HEIGHT) {
-        setPlayerPosition({ x: newX, y: newY });
+        setPlayerPosition({ x: newX, y: newY, direction: newDirection });
       }
     },
     [playerPosition]
@@ -32,16 +32,16 @@ const Maze = () => {
       e.preventDefault();
       switch (e.key) {
         case "ArrowUp":
-          movePlayer(0, -1);
+          movePlayer(0, -1, "up");
           break;
         case "ArrowDown":
-          movePlayer(0, 1);
+          movePlayer(0, 1, "down");
           break;
         case "ArrowLeft":
-          movePlayer(-1, 0);
+          movePlayer(-1, 0, "left");
           break;
         case "ArrowRight":
-          movePlayer(1, 0);
+          movePlayer(1, 0, "right");
           break;
         default:
           break;
@@ -62,6 +62,22 @@ const Maze = () => {
     let cellClass = "cell";
     if (isPlayerCell) {
       cellClass = "player";
+      switch (playerPosition.direction) {
+        case "up":
+          cellClass += " up";
+          break;
+        case "down":
+          cellClass += " down";
+          break;
+        case "left":
+          cellClass += " left";
+          break;
+        case "right":
+          cellClass += " right";
+          break;
+        default:
+          break;
+      }
     } else if (isNpcCell) {
       cellClass = "npc";
     }

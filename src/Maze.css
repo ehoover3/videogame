@@ -14,11 +14,30 @@
   border: 1px solid #ccc;
 }
 
+/* Assuming the sprite sheet has a width of 96px and a height of 128px */
 .player {
-  width: 30px;
+  width: 32px;
   height: 30px;
-  background-color: #007bff; /* Blue color for the player */
-  border: 1px solid #ccc;
+  background-image: url("./assets/images/skeleton.png");
+  background-size: 520px 840px;
+  background-position: -4px -89px; /* Position of the player sprite */
+}
+
+/* Adjust position for each direction */
+.player.up {
+  background-position: -4px -09px;
+}
+
+.player.down {
+  background-position: -4px -89px;
+}
+
+.player.left {
+  background-position: -4px -49px;
+}
+
+.player.right {
+  background-position: -4px -129px;
 }
 
 .npc {
