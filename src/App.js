@@ -1,12 +1,19 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import StartScreen from "./components/StartScreen";
 import "./Maze.css";
 
 const MAZE_WIDTH = 30;
 const MAZE_HEIGHT = 20;
 
 const Maze = () => {
+  const [showStartScreen, setShowStartScreen] = useState(true);
   const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
-  const npcPosition = { x: 5, y: 5 };
+  const npcPosition = useMemo(() => ({ x: 5, y: 5 }), []);
+  const [showDialogue, setShowDialogue] = useState(false);
+
+  const handleStart = () => {
+    setShowStartScreen(false);
+  };
 
   const movePlayer = useCallback(
     (dx, dy) => {
@@ -40,22 +47,24 @@ const Maze = () => {
           break;
       }
     };
-
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [movePlayer]);
 
+  useEffect(() => {
+    const isNextToNPC = (playerPosition.x === npcPosition.x && Math.abs(playerPosition.y - npcPosition.y) === 1) || (playerPosition.y === npcPosition.y && Math.abs(playerPosition.x - npcPosition.x) === 1);
+    setShowDialogue(isNextToNPC);
+  }, [playerPosition, npcPosition]);
+
   const renderCell = (x, y, playerPosition, npcPosition) => {
     const isPlayerCell = x === playerPosition.x && y === playerPosition.y;
     const isNpcCell = x === npcPosition.x && y === npcPosition.y;
-
     let cellClass = "cell";
     if (isPlayerCell) {
       cellClass = "player";
     } else if (isNpcCell) {
       cellClass = "npc";
     }
-
     return <div key={`${x}-${y}`} className={cellClass} />;
   };
 
@@ -79,7 +88,25 @@ const Maze = () => {
     return rows;
   };
 
-  return <div className='maze'>{renderMaze()}</div>;
+  return (
+    <div>
+      {showStartScreen ? (
+        <StartScreen onStart={handleStart} />
+      ) : (
+        <>
+          <div>
+            <div className='maze'>{renderMaze()}</div>
+            {showDialogue && (
+              <div className='dialogue-box'>
+                <p>Hello there!</p>
+                <button onClick={() => setShowDialogue(false)}>Close</button>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
 };
 
 export default Maze;
