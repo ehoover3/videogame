@@ -6,6 +6,7 @@ const MAZE_HEIGHT = 20;
 
 const Maze = () => {
   const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
+  const npcPosition = { x: 5, y: 5 };
 
   const movePlayer = useCallback(
     (dx, dy) => {
@@ -44,16 +45,24 @@ const Maze = () => {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [movePlayer]);
 
-  const renderCell = (x, y, playerPosition) => {
+  const renderCell = (x, y, playerPosition, npcPosition) => {
     const isPlayerCell = x === playerPosition.x && y === playerPosition.y;
-    const cellClass = isPlayerCell ? "player" : "cell";
+    const isNpcCell = x === npcPosition.x && y === npcPosition.y;
+
+    let cellClass = "cell";
+    if (isPlayerCell) {
+      cellClass = "player";
+    } else if (isNpcCell) {
+      cellClass = "npc";
+    }
+
     return <div key={`${x}-${y}`} className={cellClass} />;
   };
 
-  const renderRow = (y, playerPosition) => {
+  const renderRow = (y, playerPosition, npcPosition) => {
     const cells = [];
     for (let x = 0; x < MAZE_WIDTH; x++) {
-      cells.push(renderCell(x, y, playerPosition));
+      cells.push(renderCell(x, y, playerPosition, npcPosition));
     }
     return (
       <div key={y} className='row'>
@@ -65,7 +74,7 @@ const Maze = () => {
   const renderMaze = () => {
     const rows = [];
     for (let y = 0; y < MAZE_HEIGHT; y++) {
-      rows.push(renderRow(y, playerPosition));
+      rows.push(renderRow(y, playerPosition, npcPosition));
     }
     return rows;
   };

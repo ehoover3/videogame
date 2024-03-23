@@ -20,3 +20,19 @@
   background-color: #007bff; /* Blue color for the player */
   border: 1px solid #ccc;
 }
+
+.npc {
+  width: 30px;
+  height: 30px;
+  background-color: #ff0000; /* Red color for the NPC */
+  border: 1px solid #ccc;
+}
+
+.dialogue-box {
+  background-color: white;
+  padding: 5px;
+  border: 1px solid black;
+  position: absolute;
+  top: -40px;
+  left: 35px;
+}
